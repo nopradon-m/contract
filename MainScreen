@@ -42,7 +42,7 @@ Screens:
                         Color: =RGBA(255, 255, 255, 1)
                         DisabledColor: =RGBA(186, 186, 186, 1)
                         Fill: =RGBA(0, 120, 212, 1)
-                        FillPortions: =15
+                        FillPortions: =1
                         Font: =Font.'Open Sans'
                         FontWeight: =FontWeight.Semibold
                         Height: =68
@@ -53,7 +53,7 @@ Screens:
                         Size: =16
                         Text: =DataSourceInfo([@'Contract Master'], DataSourceInfo.DisplayName)
                   - Icon1:
-                      Control: ModernIcon@1.1.0
+                      Control: ModernIcon@1.1.1
                       Properties:
                         BorderStyle: =BorderStyle.None
                         Fill: =RGBA(0, 120, 212, 1)
@@ -72,7 +72,6 @@ Screens:
                         Color: =RGBA(255, 255, 255, 1)
                         DisabledColor: =RGBA(186, 186, 186, 1)
                         Fill: =RGBA(0, 120, 212, 1)
-                        FillPortions: =2
                         Font: =Font.'Open Sans'
                         FontWeight: =FontWeight.Semibold
                         Height: =68
@@ -82,7 +81,7 @@ Screens:
                         PaddingRight: =16
                         PaddingTop: =16
                         Size: =10
-                        Text: ="Version 0.9.550"
+                        Text: ="Version 0.9.700"
             - BodyContainer1:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -219,6 +218,17 @@ Screens:
                                     Height: =44
                                     OnSelect: =Select(NewRecordAddIcon1)
                                     Text: ="New"
+                              - opcoFilter:
+                                  Control: ModernCombobox@1.1.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Start
+                                    FillPortions: =1
+                                    Height: =44
+                                    InputTextPlaceholder: ="Opco"
+                                    ItemDisplayText: =ThisItem.Value
+                                    Items: =["Sonepar (Thailand) Limited","Sonic Automation LTD"]
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
                         - RecordsListSeparator1:
                             Control: Rectangle@2.3.0
                             Properties:
@@ -264,8 +274,8 @@ Screens:
                                     Size: =14
                                     Text: =ThisItem.Title
                                     VerticalAlign: =VerticalAlign.Top
-                                    Width: =234
-                                    X: =16
+                                    Width: =Parent.TemplateWidth - Subtitle1.Width - 32
+                                    X: =11
                                     Y: =7
                               - Subtitle1:
                                   Control: Label@2.5.1
@@ -282,11 +292,11 @@ Screens:
                                     PaddingLeft: =12
                                     PaddingRight: =10
                                     PaddingTop: =0
-                                    Size: =12
+                                    Size: =11
                                     Text: =ThisItem.'เลขที่คุมสัญญา (Running No.)'
                                     VerticalAlign: =VerticalAlign.Top
-                                    Width: =112
-                                    X: =250
+                                    Width: =138
+                                    X: =Parent.TemplateWidth - Self.Width - 5
                                     Y: =7
                               - Body1:
                                   Control: Label@2.5.1
@@ -298,6 +308,7 @@ Screens:
                                     FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
                                     Height: =Self.Size * 1.8
                                     OnSelect: =Select(Parent)
+                                    Overflow: =Overflow.Scroll
                                     PaddingBottom: =0
                                     PaddingLeft: =12
                                     PaddingRight: =0
@@ -305,8 +316,8 @@ Screens:
                                     Size: =12
                                     Text: =ThisItem.'ชื่อสัญญา (Contract Name)'
                                     VerticalAlign: =VerticalAlign.Top
-                                    Width: =234
-                                    X: =Title1.X
+                                    Width: =167
+                                    X: =11
                                     Y: =41
                               - Separator1:
                                   Control: Rectangle@2.3.0
@@ -343,15 +354,15 @@ Screens:
                                     Size: =12
                                     Text: =ThisItem.'ชื่อบริษัท/บุคคล (Counter Party Name)'
                                     VerticalAlign: =VerticalAlign.Top
-                                    Width: =Title1.Width
-                                    X: =Title1.X
+                                    Width: =Parent.TemplateWidth - Subtitle1.Width - 32
+                                    X: =11
                                     Y: =71
                               - Subtitle1_1:
                                   Control: Label@2.5.1
                                   Properties:
                                     Align: =Align.Right
                                     BorderColor: =RGBA(0, 0, 0, 1)
-                                    Color: =If(Self.Text = "Active",Color.Green,Self.Text = "Expired",Color.Red,Color.Orange)
+                                    Color: =If(Self.Text = "Active",Color.Green,Self.Text = "Expired",Color.Red,Color.Blue)
                                     DisabledColor: =RGBA(161, 159, 157, 1)
                                     Font: =Font.'Segoe UI'
                                     FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
@@ -362,10 +373,10 @@ Screens:
                                     PaddingRight: =10
                                     PaddingTop: =0
                                     Size: =12
-                                    Text: =ThisItem.transectionStatus.Value
+                                    Text: =If(ThisItem.contractStatus.Value = "Signed by Both Parties (Completed)",ThisItem.transectionStatus.Value,ThisItem.contractStatus.Value)
                                     VerticalAlign: =VerticalAlign.Top
-                                    Width: =112
-                                    X: =250
+                                    Width: =173
+                                    X: =Parent.TemplateWidth - Self.Width - 5
                                     Y: =41
                   - RightContainer1:
                       Control: GroupContainer@1.5.0
@@ -575,6 +586,7 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           Height: =33
                                           Width: =Parent.Width
+                                          WidthFit: =true
                                           X: =0
                                           Y: =0
                                         Children:
@@ -592,7 +604,7 @@ Screens:
                                                 Font: =Font.'Segoe UI'
                                                 Height: =34
                                                 Text: ="1. ข้อมูลสัญญา  |  Contract Information"
-                                                Width: =916
+                                                Width: =Parent.Width
                                     - Title_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicTextualEdit
@@ -605,6 +617,7 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue1.Text
                                           Width: =458
+                                          WidthFit: =true
                                           X: =0
                                           Y: =1
                                         Children:
@@ -716,6 +729,7 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue2.Text
                                           Width: =458
+                                          WidthFit: =true
                                           X: =1
                                           Y: =1
                                         Children:
@@ -831,6 +845,7 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue3.Text
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
                                           Y: =2
                                         Children:
@@ -937,11 +952,12 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           DataField: ="contractStatus"
                                           Default: =ThisItem.contractStatus
-                                          DisplayName: =DataSourceInfo([@'Contract Master'],DataSourceInfo.DisplayName,'contractStatus')
+                                          DisplayName: =DataSourceInfo([@'Contract Master'],DataSourceInfo.DisplayName,contractStatus)
                                           Height: =104
                                           Required: =false
                                           Update: =DataCardValue20.Selected
                                           Width: =458
+                                          WidthFit: =true
                                           X: =0
                                           Y: =3
                                         Children:
@@ -961,7 +977,7 @@ Screens:
                                                 FontWeight: =FontWeight.Semibold
                                                 Height: =34
                                                 PaddingLeft: =0
-                                                Text: ="Contract Status"
+                                                Text: ="Signing Status"
                                                 Width: =Parent.Width - 60
                                                 Wrap: =false
                                                 X: =30
@@ -989,7 +1005,7 @@ Screens:
                                                 HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                 HoverColor: =RGBA(50, 49, 48, 1)
                                                 HoverFill: =RGBA(245, 245, 245, 1)
-                                                Items: =Choices([@'Contract Master'].'contractStatus')
+                                                Items: =Choices([@'Contract Master'].contractStatus)
                                                 PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                 PressedColor: =RGBA(255, 255, 255, 1)
                                                 PressedFill: =RGBA(0, 120, 212, 1)
@@ -1054,10 +1070,11 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           DataField: ="transectionStatus"
                                           Default: =ThisItem.transectionStatus
-                                          DisplayName: =DataSourceInfo([@'Contract Master'],DataSourceInfo.DisplayName,'transectionStatus')
+                                          DisplayName: =DataSourceInfo([@'Contract Master'],DataSourceInfo.DisplayName,transectionStatus)
                                           Required: =false
                                           Update: =DataCardValue23.Selected
                                           Width: =458
+                                          WidthFit: =true
                                           X: =1
                                           Y: =3
                                         Children:
@@ -1077,7 +1094,7 @@ Screens:
                                                 FontWeight: =FontWeight.Semibold
                                                 Height: =34
                                                 PaddingLeft: =0
-                                                Text: ="Transection Status"
+                                                Text: ="Contract Status"
                                                 Width: =Parent.Width - 60
                                                 Wrap: =false
                                                 X: =30
@@ -1094,8 +1111,7 @@ Screens:
                                                 ChevronHoverBackground: =RGBA(245, 245, 245, 1)
                                                 ChevronHoverFill: =RGBA(50, 49, 48, 1)
                                                 Color: =RGBA(50, 49, 48, 1)
-                                                DefaultSelectedItems: |-
-                                                  =If((newMode = true || editMode = true) && DataCardValue20.Selected.Value = "Signed by Both Parties (Completed)",{Value: "Active"},Parent.Default)
+                                                DefaultSelectedItems: "=If(\r\n    // เช็คโหมดและสถานะก่อน\r\n    (newMode = true || editMode = true) && DataCardValue20.Selected.Value = \"Signed by Both Parties (Completed)\",\r\n    \r\n    // ถ้าใช่ ค่อยมาแยกตามวันที่\r\n    If(\r\n        !IsBlank(DataCardValue13.SelectedDate) && DataCardValue13.SelectedDate < Today(), \r\n        {Value: \"Expired\"},\r\n        \r\n        !IsBlank(DataCardValue13.SelectedDate) && DataCardValue13.SelectedDate >= Today(), \r\n        {Value: \"Active\"},\r\n        \r\n        Parent.Default\r\n    ),\r\n    \r\n    // ถ้าไม่ใช่โหมด New/Edit หรือยังไม่ได้ Sign\r\n    Parent.Default\r\n)"
                                                 DisabledBorderColor: =RGBA(0, 0, 0, 0)
                                                 DisabledColor: =RGBA(161, 159, 157, 1)
                                                 DisabledFill: =RGBA(242, 242, 241, 0)
@@ -1106,7 +1122,7 @@ Screens:
                                                 HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                 HoverColor: =RGBA(50, 49, 48, 1)
                                                 HoverFill: =RGBA(245, 245, 245, 1)
-                                                Items: =Choices([@'Contract Master'].'transectionStatus')
+                                                Items: =Choices([@'Contract Master'].transectionStatus)
                                                 PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                 PressedColor: =RGBA(255, 255, 255, 1)
                                                 PressedFill: =RGBA(0, 120, 212, 1)
@@ -1171,6 +1187,7 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           Height: =0
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
                                           Y: =4
                                         Children:
@@ -1188,7 +1205,7 @@ Screens:
                                                 Font: =Font.'Segoe UI'
                                                 Height: =34
                                                 Text: ="2. ประเภทสัญญา  |  Contract Type"
-                                                Width: =916
+                                                Width: =Parent.Width
                                     - ประเภทคู่สัญญา (Counterparty Type)_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicComboBoxEdit
@@ -1200,6 +1217,7 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue4.Selected
                                           Width: =458
+                                          WidthFit: =true
                                           X: =0
                                           Y: =5
                                         Children:
@@ -1322,6 +1340,7 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue5.Selected
                                           Width: =458
+                                          WidthFit: =true
                                           X: =1
                                           Y: =5
                                         Children:
@@ -1431,7 +1450,6 @@ Screens:
                                     - ประเภทสัญญา (Contract Type)_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicComboBoxEdit
-                                        IsLocked: true
                                         Properties:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           DataField: ="OData__x0e1b__x0e23__x0e30__x0e40__x0e"
@@ -1440,9 +1458,10 @@ Screens:
                                           Height: =94
                                           Required: =false
                                           Update: =DataCardValue6.Selected
-                                          Width: =916
+                                          Width: =458
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =6
+                                          Y: =7
                                         Children:
                                           - DataCardKey6:
                                               Control: Label@2.5.1
@@ -1547,6 +1566,124 @@ Screens:
                                                 Width: =30
                                                 Wrap: =false
                                                 Y: =DataCardKey6.Y
+                                    - signType_DataCard1:
+                                        Control: TypedDataCard@1.0.7
+                                        Variant: ClassicComboBoxEdit
+                                        Properties:
+                                          BorderColor: =RGBA(245, 245, 245, 1)
+                                          DataField: ="signType"
+                                          Default: =ThisItem.signType
+                                          DisplayName: =DataSourceInfo([@'Contract Master'],DataSourceInfo.DisplayName,'signType')
+                                          Required: =false
+                                          Update: =DataCardValue24.Selected
+                                          Width: =458
+                                          WidthFit: =true
+                                          X: =0
+                                          Y: =7
+                                        Children:
+                                          - DataCardKey24:
+                                              Control: Label@2.5.1
+                                              MetadataKey: FieldName
+                                              Properties:
+                                                AutoHeight: =true
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =RGBA(50, 49, 48, 1)
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =34
+                                                PaddingLeft: =0
+                                                Text: ="ประเภทการเซ็นเอกสาร (Sign Type)"
+                                                Width: =Parent.Width - 60
+                                                Wrap: =false
+                                                X: =30
+                                                Y: =10
+                                          - DataCardValue24:
+                                              Control: Classic/ComboBox@2.4.0
+                                              MetadataKey: FieldValue
+                                              Properties:
+                                                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                                                ChevronBackground: =RGBA(245, 245, 245, 1)
+                                                ChevronDisabledBackground: =RGBA(242, 242, 241, 0)
+                                                ChevronDisabledFill: =RGBA(161, 159, 157, 1)
+                                                ChevronFill: =RGBA(50, 49, 48, 1)
+                                                ChevronHoverBackground: =RGBA(245, 245, 245, 1)
+                                                ChevronHoverFill: =RGBA(50, 49, 48, 1)
+                                                Color: =RGBA(50, 49, 48, 1)
+                                                DefaultSelectedItems: =Parent.Default
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                DisabledFill: =RGBA(242, 242, 241, 0)
+                                                DisplayFields: =["Value"]
+                                                DisplayMode: =Parent.DisplayMode
+                                                Fill: =RGBA(245, 245, 245, 1)
+                                                Font: =Font.'Segoe UI'
+                                                HoverBorderColor: =RGBA(16, 110, 190, 1)
+                                                HoverColor: =RGBA(50, 49, 48, 1)
+                                                HoverFill: =RGBA(245, 245, 245, 1)
+                                                Items: =Choices([@'Contract Master'].'signType')
+                                                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                                                PressedBorderColor: =RGBA(16, 110, 190, 1)
+                                                PressedColor: =RGBA(255, 255, 255, 1)
+                                                PressedFill: =RGBA(0, 120, 212, 1)
+                                                SearchFields: =["Value"]
+                                                SelectMultiple: =false
+                                                SelectionColor: =RGBA(255, 255, 255, 1)
+                                                SelectionFill: =RGBA(0, 120, 212, 1)
+                                                Tooltip: =Parent.DisplayName
+                                                Width: =Parent.Width - 60
+                                                X: =30
+                                                Y: =DataCardKey24.Y + DataCardKey24.Height + 5
+                                          - ErrorMessage24:
+                                              Control: Label@2.5.1
+                                              MetadataKey: ErrorMessage
+                                              Properties:
+                                                AutoHeight: =true
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =RGBA(168, 0, 0, 1)
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(168, 0, 0, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =10
+                                                Live: =Live.Assertive
+                                                PaddingBottom: =0
+                                                PaddingLeft: =0
+                                                PaddingRight: =0
+                                                PaddingTop: =0
+                                                Text: =Parent.Error
+                                                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                                                Width: =Parent.Width - 60
+                                                X: =30
+                                                Y: =DataCardValue24.Y + DataCardValue24.Height
+                                          - StarVisible24:
+                                              Control: Label@2.5.1
+                                              MetadataKey: FieldRequired
+                                              Properties:
+                                                Align: =Align.Center
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =RGBA(50, 49, 48, 1)
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =DataCardKey24.Height
+                                                PaddingLeft: =0
+                                                Text: ="*"
+                                                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                                                Width: =30
+                                                Wrap: =false
+                                                Y: =DataCardKey24.Y
                                     - DataCard3:
                                         Control: TypedDataCard@1.0.7
                                         Variant: BlankCard
@@ -1554,8 +1691,9 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           Height: =0
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =7
+                                          Y: =8
                                         Children:
                                           - Label1_2:
                                               Control: Label@2.5.1
@@ -1571,7 +1709,7 @@ Screens:
                                                 Font: =Font.'Segoe UI'
                                                 Height: =34
                                                 Text: ="3. คู่สัญญา  |  Parties"
-                                                Width: =916
+                                                Width: =Parent.Width
                                     - ชื่อบริษัท (Legal Entity)_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicComboBoxEdit
@@ -1580,11 +1718,12 @@ Screens:
                                           DataField: ="OData__x0e0a__x0e37__x0e48__x0e2d__x0e"
                                           Default: =ThisItem.'ชื่อบริษัท (Legal Entity)'
                                           DisplayName: =DataSourceInfo([@'Contract Master'],DataSourceInfo.DisplayName,'ชื่อบริษัท (Legal Entity)')
-                                          Required: =false
+                                          Required: =true
                                           Update: =DataCardValue7.Selected
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =8
+                                          Y: =9
                                         Children:
                                           - DataCardKey7:
                                               Control: Label@2.5.1
@@ -1703,8 +1842,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue21.Text
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =9
+                                          Y: =10
                                         Children:
                                           - DataCardKey21:
                                               Control: Label@2.5.1
@@ -1828,7 +1968,7 @@ Screens:
                                                       DataCardValue4.Selected.Value = "ลูกค้า (Customer)",
                                                   Filter(AllCustomerList,StartsWith(searchName, Self.SearchText))
                                                   )
-                                                OnChange: =Set(partyName,Self.Selected.cusName)
+                                                OnChange: =Set(partyName,Self.Selected.searchName)
                                                 PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                 PressedColor: =RGBA(255, 255, 255, 1)
                                                 PressedFill: =RGBA(0, 120, 212, 1)
@@ -1837,7 +1977,7 @@ Screens:
                                                 SelectionColor: =RGBA(255, 255, 255, 1)
                                                 SelectionFill: =RGBA(0, 120, 212, 1)
                                                 Visible: =If(DataCardValue4.Selected.Value = "ลูกค้า (Customer)" && (newMode = true || editMode = true),true,false)
-                                                Width: =855
+                                                Width: =Parent.Width - 60
                                                 X: =30
                                                 Y: =48
                                           - SelectCVBox_1:
@@ -1851,6 +1991,7 @@ Screens:
                                                 ChevronHoverBackground: =RGBA(245, 245, 245, 1)
                                                 ChevronHoverFill: =RGBA(50, 49, 48, 1)
                                                 Color: =RGBA(50, 49, 48, 1)
+                                                DefaultSelectedItems: =If(editMode = true,[partyName])
                                                 DisabledBorderColor: =RGBA(0, 0, 0, 0)
                                                 DisabledColor: =RGBA(161, 159, 157, 1)
                                                 DisabledFill: =RGBA(242, 242, 241, 0)
@@ -1864,7 +2005,7 @@ Screens:
                                                   =If(
                                                       DataCardValue4.Selected.Value = "ผู้ขาย / ผู้จำหน่าย (Supplier / Vendor)",Filter('Supplier Data Master',StartsWith(searchName, Self.SearchText))
                                                   )
-                                                OnChange: =Set(partyName,Self.Selected.Name)
+                                                OnChange: =Set(partyName,Self.Selected.searchName)
                                                 PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                 PressedColor: =RGBA(255, 255, 255, 1)
                                                 PressedFill: =RGBA(0, 120, 212, 1)
@@ -1873,7 +2014,7 @@ Screens:
                                                 SelectionColor: =RGBA(255, 255, 255, 1)
                                                 SelectionFill: =RGBA(0, 120, 212, 1)
                                                 Visible: =If(DataCardValue4.Selected.Value = "ผู้ขาย / ผู้จำหน่าย (Supplier / Vendor)" && (newMode = true || editMode = true),true,false)
-                                                Width: =856
+                                                Width: =Parent.Width - 60
                                                 X: =30
                                                 Y: =48
                                     - DataCard4:
@@ -1883,8 +2024,9 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           Height: =0
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =10
+                                          Y: =11
                                         Children:
                                           - Label1_3:
                                               Control: Label@2.5.1
@@ -1900,7 +2042,7 @@ Screens:
                                                 Font: =Font.'Segoe UI'
                                                 Height: =34
                                                 Text: ="4. สถานะสัญญา  |  Renewal Status"
-                                                Width: =916
+                                                Width: =Parent.Width
                                     - สถานะสัญญา (Renewal Status)_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicComboBoxEdit
@@ -1914,8 +2056,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue8.Selected
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =11
+                                          Y: =12
                                         Children:
                                           - DataCardKey8:
                                               Control: Label@2.5.1
@@ -2033,8 +2176,9 @@ Screens:
                                           Update: =DataCardValue9.Text
                                           Visible: =If(DataCardValue8.Selected.Value = "สัญญาต่ออายุจากสัญญาเดิม (Renewal)",true,false)
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =12
+                                          Y: =13
                                         Children:
                                           - DataCardKey9:
                                               Control: Label@2.5.1
@@ -2139,14 +2283,14 @@ Screens:
                                                 X: =367
                                                 Y: =11
                                           - Combobox1:
-                                              Control: ModernCombobox@1.1.0
+                                              Control: ModernCombobox@1.1.1
                                               Properties:
                                                 Height: =40
                                                 ItemDisplayText: =ThisItem.Title
                                                 Items: ='Contract Master'
                                                 SelectMultiple: =false
                                                 Visible: =If(CheckboxCanvas1.Checked = false,true,false)
-                                                Width: =856
+                                                Width: =Parent.Width - 60
                                                 X: =30
                                                 Y: =48
                                     - อ้างอิงสัญญาหลักเลขที่ (Master Contract No.)_DataCard1:
@@ -2163,8 +2307,9 @@ Screens:
                                           Update: =DataCardValue10.Text
                                           Visible: =If(DataCardValue8.Selected.Value = "สัญญาแก้ไขเพิ่มเติม / ภาคผนวกแนบท้ายสัญญา (Amendment / Addendum)",true,false)
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =13
+                                          Y: =14
                                         Children:
                                           - DataCardKey10:
                                               Control: Label@2.5.1
@@ -2269,8 +2414,9 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           Height: =0
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =14
+                                          Y: =15
                                         Children:
                                           - Label1_4:
                                               Control: Label@2.5.1
@@ -2286,7 +2432,7 @@ Screens:
                                                 Font: =Font.'Segoe UI'
                                                 Height: =34
                                                 Text: ="5. วันที่สำคัญ  |  Key Dates"
-                                                Width: =916
+                                                Width: =Parent.Width
                                     - วันที่ลงนาม (Signed Date)_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicDateEdit
@@ -2298,8 +2444,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue11.SelectedDate
                                           Width: =458
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =15
+                                          Y: =16
                                         Children:
                                           - DataCardKey11:
                                               Control: Label@2.5.1
@@ -2406,8 +2553,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue12.SelectedDate
                                           Width: =458
+                                          WidthFit: =true
                                           X: =1
-                                          Y: =15
+                                          Y: =16
                                         Children:
                                           - DataCardKey12:
                                               Control: Label@2.5.1
@@ -2514,8 +2662,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue13.SelectedDate
                                           Width: =458
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =16
+                                          Y: =17
                                         Children:
                                           - DataCardKey13:
                                               Control: Label@2.5.1
@@ -2622,8 +2771,9 @@ Screens:
                                           Required: =false
                                           Update: =Value(DataCardValue14.Text)
                                           Width: =458
+                                          WidthFit: =true
                                           X: =1
-                                          Y: =16
+                                          Y: =17
                                         Children:
                                           - DataCardKey14:
                                               Control: Label@2.5.1
@@ -2734,8 +2884,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue15.Selected
                                           Width: =458
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =17
+                                          Y: =18
                                         Children:
                                           - DataCardKey15:
                                               Control: Label@2.5.1
@@ -2847,8 +2998,9 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           Height: =7
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =18
+                                          Y: =19
                                         Children:
                                           - Label1_5:
                                               Control: Label@2.5.1
@@ -2864,7 +3016,7 @@ Screens:
                                                 Font: =Font.'Segoe UI'
                                                 Height: =34
                                                 Text: ="6. ผู้รับผิดชอบ  |  Contract Owner"
-                                                Width: =916
+                                                Width: =Parent.Width
                                     - ผู้รับผิดชอบหลัก (Contract Owner)_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicComboBoxEdit
@@ -2876,8 +3028,9 @@ Screens:
                                           Required: =true
                                           Update: =DataCardValue16.Selected
                                           Width: =458
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =19
+                                          Y: =20
                                         Children:
                                           - DataCardKey16:
                                               Control: Label@2.5.1
@@ -2994,8 +3147,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue18.Text
                                           Width: =458
+                                          WidthFit: =true
                                           X: =1
-                                          Y: =19
+                                          Y: =20
                                         Children:
                                           - DataCardKey18:
                                               Control: Label@2.5.1
@@ -3108,8 +3262,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue17.Selected
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =20
+                                          Y: =21
                                         Children:
                                           - DataCardKey17:
                                               Control: Label@2.5.1
@@ -3242,8 +3397,9 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           Height: =0
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =21
+                                          Y: =22
                                         Children:
                                           - Label1_6:
                                               Control: Label@2.5.1
@@ -3259,7 +3415,7 @@ Screens:
                                                 Font: =Font.'Segoe UI'
                                                 Height: =34
                                                 Text: ="7. เอกสารแนบ  |  Attachments"
-                                                Width: =916
+                                                Width: =Parent.Width
                                     - Attachments_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicAttachmentsEdit
@@ -3272,8 +3428,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue22.Attachments
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =22
+                                          Y: =23
                                         Children:
                                           - DataCardKey22:
                                               Control: Label@2.5.1
@@ -3383,8 +3540,9 @@ Screens:
                                           BorderColor: =RGBA(245, 245, 245, 1)
                                           Height: =3
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =23
+                                          Y: =24
                                         Children:
                                           - Label1_7:
                                               Control: Label@2.5.1
@@ -3400,7 +3558,7 @@ Screens:
                                                 Font: =Font.'Segoe UI'
                                                 Height: =34
                                                 Text: ="8. หมายเหตุ  |  Notes"
-                                                Width: =916
+                                                Width: =Parent.Width
                                     - Remark (หมายเหตุ)_DataCard1:
                                         Control: TypedDataCard@1.0.7
                                         Variant: ClassicTextualEdit
@@ -3414,8 +3572,9 @@ Screens:
                                           Required: =false
                                           Update: =DataCardValue19.Text
                                           Width: =916
+                                          WidthFit: =true
                                           X: =0
-                                          Y: =24
+                                          Y: =25
                                         Children:
                                           - DataCardKey19:
                                               Control: Label@2.5.1
